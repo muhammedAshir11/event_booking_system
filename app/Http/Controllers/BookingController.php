@@ -15,6 +15,14 @@ class BookingController extends Controller
         $this->bookingService = $bookingService;
     }
 
+    public function index()
+    {
+        $userId = auth()->id();
+        $bookings = $this->bookingService->getUserBookings($userId);
+
+        return view('bookings.index', compact('bookings'));
+    }
+
     public function store(BookTicketsRequest $request)
     {
         try {

@@ -37,7 +37,7 @@
             <button onclick="closeBookingModal()"
                 class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
             <h3 class="text-2xl font-bold text-gray-800 mb-4">Book Your Ticket</h3>
-            <form action="{{ route('ticket.booking') }}" method="POST" class="space-y-4">
+            <form action="{{ route('booking.store') }}" method="POST" class="space-y-4">
                 @csrf
                 <input type="hidden" name="event_id" id="eventId">
                 <div>

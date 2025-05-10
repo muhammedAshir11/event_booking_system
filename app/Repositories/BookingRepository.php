@@ -9,4 +9,12 @@ class BookingRepository
     {
         return Booking::create($data);
     }
+
+    public function getBookingsByUser($userId, $perPage = 10)
+    {
+        return Booking::where('user_id', $userId)
+            ->with('event')  // Eager load the related event details (name, venue, etc.)
+            ->orderBy('id','desc')
+            ->paginate($perPage);
+    }
 }

@@ -3,13 +3,20 @@
 namespace App\Services;
 
 use App\Models\Event;
-use App\Models\Booking;
-use Illuminate\Support\Facades\DB;
+use App\Repositories\BookingRepository;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class BookingService
 {
+    protected $bookingRepo;
+
+    public function __construct(BookingRepository $bookingRepo)
+    {
+        $this->bookingRepo = $bookingRepo;
+    }
+
     public function bookTickets($userId, $eventId, $numberOfTickets)
     {
         DB::beginTransaction();
@@ -38,7 +45,7 @@ class BookingService
             $totalPrice = $event->ticket_price * $numberOfTickets;
 
             // Create the booking record
-            $booking = Booking::create([
+            $booking = $this->bookingRepo->create([
                 'user_id' => $userId,
                 'event_id' => $eventId,
                 'number_of_tickets' => $numberOfTickets,
@@ -55,5 +62,10 @@ class BookingService
                 'number_of_tickets' => 'Booking failed. Please try again later.',
             ]);
         }
+    }
+
+    public function getUserBookings($userId, $perPage = 10)
+    {
+        return $this->bookingRepo->getBookingsByUser($userId, $perPage);
     }
 }
