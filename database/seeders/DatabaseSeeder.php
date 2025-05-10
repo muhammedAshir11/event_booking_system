@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Insert sample event data to database
+        $this->call(UserSeeder::class);
         $this->call(EventSeeder::class);
 
         // User::factory(10)->create();
