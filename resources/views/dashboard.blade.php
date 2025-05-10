@@ -19,13 +19,15 @@
                         <p class="text-sm text-gray-600">{{ $event->venue }} —
                             {{ \Carbon\Carbon::parse($event->event_date)->format('F d, Y') }}</p>
                         <p class="mt-2">Price: ₹{{ $event->ticket_price }} | Available Tickets:
-                            <span class="availableTickets{{ $event->id }}">{{ $event->available_seats }}</span>
+                            {{ $event->available_seats }}
                         </p>
 
-                        <a onclick="openBookingModal({{ $event }})"
-                            class="mt-4 inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
-                            Book Now
-                        </a>
+                        @if($event->available_seats > 0)
+                            <a onclick="openBookingModal({{ $event }})"
+                                class="mt-4 inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+                                Book Now
+                            </a>
+                        @endif
                     </div>
                 @endforeach
             </div>
@@ -74,7 +76,7 @@
         $('#eventId').val(event.id);
         $('#numberOfTickets').val('');
         $('#eventName').html(event.name);
-        changeAvailableTicketCount(event.id, event.available_seats)
+        changeAvailableTicketCount(event.available_seats)
         document.getElementById('bookingModal').classList.remove('hidden');
     }
 
@@ -82,9 +84,8 @@
         document.getElementById('bookingModal').classList.add('hidden');
     }
 
-    const changeAvailableTicketCount = (eventId, ticketCount = '--') => {
+    const changeAvailableTicketCount = (ticketCount = 0) => {
         $('#numberOfTickets').attr('max', ticketCount);
         $('#availableTicketCount').html(ticketCount);
-        $('.availableTickets' + eventId).html(ticketCount);
     }
 </script>
